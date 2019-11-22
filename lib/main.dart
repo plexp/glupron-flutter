@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
+      routes: <String, WidgetBuilder> {
+        '/' : (BuildContext context) => MyHomePage(),
+      },
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
