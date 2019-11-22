@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "98357054563",
+    "firebase_url": "https://shh19-fivestars.firebaseio.com",
+    "project_id": "shh19-fivestars",
+    "storage_bucket": "shh19-fivestars.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98357054563:android:dcdcfee03536d006cdbc56",
+        "android_client_info": {
+          "package_name": "org.techheaven.shh19"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98357054563-5sj6sitipdc2r5ktkh789cnavccctdsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVrYITRkwf8-L6JtVmhg40oiWFNSCj_bc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98357054563-5sj6sitipdc2r5ktkh789cnavccctdsk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "98357054563-gljqg53hhrekkbbfjp1jk53akjou1864.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.techheaven.shh19"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
