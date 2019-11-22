@@ -24,6 +24,10 @@ class MyApp extends StatelessWidget {
       ),
       routes: <String, WidgetBuilder> {
         '/' : (BuildContext context) => WelcomeScreen(),
+
+        '/foto' : (BuildContext context) => WelcomeScreen(),
+        '/statistic' : (BuildContext context) => WelcomeScreen(),
+        '/settings' : (BuildContext context) => WelcomeScreen(),
       },
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
