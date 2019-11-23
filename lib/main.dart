@@ -5,7 +5,6 @@ import 'screens/Statistic.dart';
 import 'screens/Settings.dart';
 import 'screens/CameraScreen.dart';
 
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
