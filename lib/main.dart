@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'screens/WelcomeScreen.dart';
 import 'screens/Statistic.dart';
+import 'screens/Settings.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
 
         '/foto' : (BuildContext context) => WelcomeScreen(),
         '/statistic' : (BuildContext context) => Statistic(),
-        '/settings' : (BuildContext context) => WelcomeScreen(),
+        '/settings' : (BuildContext context) => Settings(),
       },
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
