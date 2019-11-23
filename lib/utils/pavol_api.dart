@@ -22,7 +22,8 @@ class DetectSend {
     String base64Image = await _imageToBase64(this.image);
 
     Map prepareJson = {
-      'gluckometerImage': base64Image,
+      'gluckometerImage': "data:image/jpeg;base64," + base64Image,
+      'language': 'cs',
 
     };
     String jsonR = jsonEncode(prepareJson);
@@ -36,6 +37,7 @@ class DetectSend {
       print(response.body);
       print(response.headers);
       print(response.request);
+      return response.body;
     });
   }
 
