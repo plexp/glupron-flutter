@@ -14,7 +14,7 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
                 children: <Widget>[
                   Expanded(
-                    flex: 8,
+                    flex: 10,
                     child: Container(
                       width: double.infinity,
                       child: RaisedButton(
@@ -34,7 +34,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: Text(""),
                   ),
                   Expanded(
-                    flex:4,
+                    flex:5,
                     child: Container(
                       width: double.infinity,
                       child: RaisedButton(
@@ -54,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: Text(""),
                   ),
                   Expanded(
-                      flex:4,
+                      flex:5,
                       child: Container(
                         width: double.infinity,
                         child: RaisedButton(
