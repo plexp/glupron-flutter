@@ -4,26 +4,26 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 // database table and column names
-final String tableMyReport = 'my_report';
+final String tableGluckoHistory = 'glucko_history';
 final String columnId = '_id';
-final String columnReportId = 'report_id';
+final String columnGluckometerValue = 'gluckometer_value';
 
 // data model class
-class MyReport {
+class GluckoHistory {
 
   int id;
-  int reportId;
+  int gluckometerValue;
 
-  MyReport();
+  GluckoHistory();
 
-  MyReport.fromMap(Map<String, dynamic> map) {
+  GluckoHistory.fromMap(Map<String, dynamic> map) {
     id = map[columnId];
-    reportId = map[columnReportId];
+    gluckometerValue = map[columnGluckometerValue];
   }
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
-      columnReportId: reportId
+      columnGluckometerValue: gluckometerValue
     };
     if (id != null) {
       map[columnId] = id;
@@ -66,35 +66,35 @@ class DatabaseHelper {
   // SQL string to create the database
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-              CREATE TABLE $tableMyReport (
+              CREATE TABLE $tableGluckoHistory (
                 $columnId INTEGER PRIMARY KEY,
-                $columnReportId INTEGER NOT NULL
+                $columnGluckometerValue INTEGER NOT NULL
               )
               ''');
   }
 
   // Database helper methods:
 
-  Future<int> insert(MyReport report) async {
+  Future<int> insert(GluckoHistory history) async {
     Database db = await database;
-    int id = await db.insert(tableMyReport, report.toMap());
+    int id = await db.insert(tableGluckoHistory, history.toMap());
     return id;
   }
 
 
   Future getAll() async {
-    List<int> reports = [];
+    List<int> history = [];
     Database db = await database;
-    List<Map> ints = await db.query(tableMyReport, columns: [columnId, columnReportId]);
+    List<Map> ints = await db.query(tableGluckoHistory, columns: [columnId, columnGluckometerValue]);
     if(ints.length > 0) {
       for(var i = 0; i < ints.length; i++) {
-        reports.add(ints[i]["report_id"]);
+        history.add(ints[i]["gluckometer_value"]);
       }
-      print(reports);
+      print(history);
     }
     else {
     }
-    return reports;
+    return history;
     //TODO get list of all
   }
 }
