@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'screens/WelcomeScreen.dart';
 import 'screens/Statistic.dart';
 import 'screens/Settings.dart';
+import 'screens/CameraScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder> {
         '/' : (BuildContext context) => WelcomeScreen(),
 
-        '/foto' : (BuildContext context) => WelcomeScreen(),
+        '/foto' : (BuildContext context) => CameraScreen(),
         '/statistic' : (BuildContext context) => Statistic(),
         '/settings' : (BuildContext context) => Settings(),
       },
