@@ -9,6 +9,7 @@ class WelcomeScreen extends StatelessWidget {
         title: 'Title',
         home: Scaffold(
           appBar: AppBar(
+            backgroundColor: Color.fromRGBO(232, 60, 63, 1),
             title: Text('Title'),
           ),
           body: Center(
@@ -19,12 +20,13 @@ class WelcomeScreen extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       child: RaisedButton(
-                        padding: const EdgeInsets.all(30.0),
-                        onPressed: () {
+                          color: Color.fromRGBO(245, 230, 228, 1),
+                          padding: const EdgeInsets.all(30.0),
+                          onPressed: () {
                           Navigator.pushNamed(context, '/foto');
                         },
                         child: const Text('Vyfotit',
-                            style: TextStyle(fontSize: 70)
+                            style: TextStyle(fontSize: 70, color: Colors.black),
                         ),
                       ),
                     )
@@ -38,15 +40,16 @@ class WelcomeScreen extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       child: RaisedButton(
+                        color: Color.fromRGBO(245, 230, 228, 1),
                         padding: const EdgeInsets.all(20.0),
                         onPressed: () {
                           Navigator.pushNamed(context, '/statistic');
                         },
                         child: const Text('Statistiky',
-                            style: TextStyle(fontSize: 50)
+                            style: TextStyle(fontSize: 50, color: Colors.black)
                         ),
                       ),
-                    )
+                    ),
                   ),
                   Expanded(
                     flex: 1,
@@ -57,12 +60,13 @@ class WelcomeScreen extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         child: RaisedButton(
+                          color: Color.fromRGBO(245, 230, 228, 1),
                           padding: const EdgeInsets.all(20.0),
                           onPressed: () {
                             Navigator.pushNamed(context, '/settings');
                           },
                           child: const Text('Nastavení',
-                              style: TextStyle(fontSize: 50)
+                              style: TextStyle(fontSize: 50, color: Colors.black)
                           ),
                         ),
                       )

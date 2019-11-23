@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
+      theme: new ThemeData(
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -20,7 +20,12 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        backgroundColor: Colors.red,
+        primarySwatch: Colors.red,
+        textTheme: Theme.of(context).textTheme.apply(
+          bodyColor: Colors.red,
+          displayColor: Colors.red,
+        )
       ),
       routes: <String, WidgetBuilder> {
         '/' : (BuildContext context) => WelcomeScreen(),
