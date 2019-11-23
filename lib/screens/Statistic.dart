@@ -19,29 +19,30 @@ class _StatisticState extends State<Statistic> {
     }
 
     Expanded icon(cas){
+      cas *= 10;
       switch(cas){
-        case 1:
+        case 10:
           return Expanded(
             flex: 1,
             child: Icon(
               Icons.arrow_upward, size: 25.0,
             ),
           );
-        case 2:
+        case 5:
           return Expanded(
             flex: 1,
             child: Icon(
               Icons.call_made, size: 25.0,
             ),
           );
-        case 3:
+        case 0:
           return Expanded(
             flex: 1,
             child: Icon(
               Icons.arrow_forward, size: 25.0,
             ),
           );
-        case 4:
+        case -5:
           return Expanded(
             flex: 1,
             child: Transform.rotate(
@@ -51,7 +52,7 @@ class _StatisticState extends State<Statistic> {
               ),
             ),
           );
-        case 5:
+        case -10:
           return Expanded(
             flex: 1,
             child: Icon(
@@ -118,11 +119,21 @@ class _StatisticState extends State<Statistic> {
                   ],
                 ),
               ),
-              items('18:52', '14,3', 5),
-              items('17:32', '17,3', 1),
-              items('16:52', '14,3', 4),
-              items('16:02', '16,3', 3),
-              items('15:52', '16,3', 2),
+              Expanded(
+                child: SizedBox(
+                  height: 200.0,
+                  child: ListView(
+                    children: <Widget>[
+                      items('18:52', '14,3', -1.0),
+                      items('17:32', '17,3', 1.0),
+                      items('16:52', '14,3', -0.5),
+                      items('16:02', '16,3', 0.0),
+                      items('15:52', '16,3', 0.5),
+                      
+                    ],
+                  ),
+                )
+              )
             ],
           ),
         )
