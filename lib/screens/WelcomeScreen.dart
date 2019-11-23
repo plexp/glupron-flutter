@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             //backgroundColor: Color.fromRGBO(232, 60, 63, 1),
             title: Text('Menu'),
@@ -73,7 +72,6 @@ class WelcomeScreen extends StatelessWidget {
                 ],
             )
           ),
-        )
     );
   }
 }
