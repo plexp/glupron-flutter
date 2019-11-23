@@ -6,11 +6,10 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Title',
         home: Scaffold(
           appBar: AppBar(
-            backgroundColor: Color.fromRGBO(232, 60, 63, 1),
-            title: Text('Title'),
+            //backgroundColor: Color.fromRGBO(232, 60, 63, 1),
+            title: Text('Menu'),
           ),
           body: Center(
             child: Column(
