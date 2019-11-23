@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'screens/WelcomeScreen.dart';
 import 'screens/Statistic.dart';
+import 'screens/Settings.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,19 +22,14 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        backgroundColor: Colors.red,
         primarySwatch: Colors.red,
-        textTheme: Theme.of(context).textTheme.apply(
-          bodyColor: Colors.red,
-          displayColor: Colors.red,
-        )
       ),
       routes: <String, WidgetBuilder> {
         '/' : (BuildContext context) => WelcomeScreen(),
 
         '/foto' : (BuildContext context) => WelcomeScreen(),
         '/statistic' : (BuildContext context) => Statistic(),
-        '/settings' : (BuildContext context) => WelcomeScreen(),
+        '/settings' : (BuildContext context) => Settings(),
       },
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
