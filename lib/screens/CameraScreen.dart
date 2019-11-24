@@ -17,7 +17,6 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  File _image;
   String _value;
 
   @override
@@ -28,14 +27,19 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
     DetectSend detect = new DetectSend(image: image);
 
     var response = await detect.sendRequest();
 
-    DetectResponse detectResponse = new DetectResponse();
-    setState(() {
-      _image = image;
-    });
+
+    Map<String, dynamic> jsonP = json.decode(response);
+
+    DetectResponse detectResponse = new DetectResponse.fromJson(jsonP);
+
+    detectResponse.processSound();
+
+
   }
   Widget build(BuildContext context) {
     return Scaffold(

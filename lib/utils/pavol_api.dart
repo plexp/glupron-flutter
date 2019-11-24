@@ -37,10 +37,10 @@ class DetectSend {
     };
     String jsonR = jsonEncode(prepareJson);
 
-    http.post("https://smart-health-hackathon-server.herokuapp.com/detect",
+    http.Response response = await http.post("https://smart-health-hackathon-server.herokuapp.com/detect",
         headers: {"Content-Type": "application/json"},
         body: jsonR
-    ).then((http.Response response) {
+    );
       print("Sending:");
       print(jsonR);
       print("Response status: ${response.statusCode}");
@@ -48,9 +48,7 @@ class DetectSend {
       print(response.body);
       print(response.headers);
       print(response.request);
-      this.body = response.body;
-      print(this.body);
-    });
+      return response.body;
   }
 }
 
@@ -62,15 +60,21 @@ class DetectResponse {
 
   DetectResponse({this.glucoseValue, this.text, this.mp3Base64, this.mp3});
 
-  factory DetectResponse.fromJon(Map json) {
-    Uint8List bytes = base64.decode(json['data']["mp3"]);
+  factory DetectResponse.fromJson(Map<String, dynamic> jsonR) {
+    //Uint8List bytes = base64.decode(jsonR['data']['speech']["mp3"]);
 
     return DetectResponse(
-      glucoseValue: json['glucoseValue'] as double,
-      text: json['data']['text'] as String,
-      mp3Base64: json['data']['mp3'],
-
+      glucoseValue: jsonR['data']['glucoseValue'] as double,
+      text: jsonR['data']['speech']['text'] as String,
+      mp3Base64: jsonR['data']['speech']['mp3'],
     );
+  }
+
+  processSound() {
+    String rawMP3 = this.mp3Base64;
+    String mp3Base64 = this.mp3Base64.split(",")[1];
+    print(mp3Base64);
+
   }
 
 }
