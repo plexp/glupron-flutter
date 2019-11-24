@@ -53,6 +53,7 @@ class _CameraScreenState extends State<CameraScreen> {
       _sound = detectResponse.getSound();
       _text = detectResponse.getText();
     });
+    advancedPlayer.play(this._sound.path, isLocal: true)
   }
 
   Widget build(BuildContext context) {
