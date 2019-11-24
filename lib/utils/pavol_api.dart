@@ -75,15 +75,22 @@ class DetectResponse {
     String rawMP3 = this.mp3Base64;
     String mp3Base64 = this.mp3Base64.split(",")[1];
     print(mp3Base64);
-    Uint8List bytes = base64.decode(mp3Base64);Directory tempDir = await getTemporaryDirectory();
+    Uint8List bytes = base64.decode(mp3Base64);
+    Directory tempDir = await getApplicationDocumentsDirectory();
     String tempPath = tempDir.path;
     File file = File(
         "$tempPath/" + DateTime.now().millisecondsSinceEpoch.toString() + ".mp3");
-    await file.writeAsBytes(bytes);
+    print("File...");
+    print(file.path);
+    await file.writeAsBytes(bytes, flush: true);
     this.mp3 = file;
   }
 
-  getValue() {
-    return glucoseValue.toString();
+  String getValue() {
+    return this.glucoseValue.toString();
+  }
+
+  File getSound() {
+    return this.mp3;
   }
 }

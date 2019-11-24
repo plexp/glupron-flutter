@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
+import 'package:path_provider/path_provider.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
@@ -10,6 +11,8 @@ import 'dart:math';
 import 'dart:convert';
 
 import 'package:shh19/utils/pavol_api.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 class CameraScreen extends StatefulWidget {
   @override
@@ -17,6 +20,12 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
+  AudioCache audioCache = new AudioCache();
+  AudioPlayer advancedPlayer = new AudioPlayer();
+  String localFilePath;
+
+  File _sound;
+
   String _value;
 
   @override
@@ -41,10 +50,10 @@ class _CameraScreenState extends State<CameraScreen> {
 
     setState(() {
       _value = detectResponse.getValue();
+      _sound = detectResponse.getSound();
     });
-
-
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -72,9 +81,11 @@ class _CameraScreenState extends State<CameraScreen> {
                       flex: 5,
                       child: Container(
                         height: double.infinity,
-                        child: RaisedButton(
+                        child: this._sound == null
+                            ? Center(child: CircularProgressIndicator())
+                            : RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
-                          onPressed: getImage,
+                          onPressed: () => audioCache.play(this._sound.path),
                           child: const Text('Přehrát',
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
@@ -90,9 +101,11 @@ class _CameraScreenState extends State<CameraScreen> {
                       flex: 5,
                       child: Container(
                         height: double.infinity,
-                        child: RaisedButton(
+                        child: this._sound == null
+                            ? Center(child: CircularProgressIndicator())
+                            : RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
-                          onPressed: getImage,
+                          onPressed: () => audioCache.play(this._sound.path),
                           child: const Text('Přehrát pomaleji',
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
