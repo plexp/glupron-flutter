@@ -25,7 +25,7 @@ class _CameraScreenState extends State<CameraScreen> {
   String localFilePath;
 
   File _sound;
-
+  String _text;
   String _value;
 
   @override
@@ -51,6 +51,7 @@ class _CameraScreenState extends State<CameraScreen> {
     setState(() {
       _value = detectResponse.getValue();
       _sound = detectResponse.getSound();
+      _text = detectResponse.getText();
     });
   }
 
@@ -64,7 +65,16 @@ class _CameraScreenState extends State<CameraScreen> {
             Expanded(
               flex: 10,
               child: _value != null
-                    ? Text(_value)
+                    ? Column(
+                children: <Widget>[Expanded(
+                  flex: 1,
+                  child: Text(_value, style: TextStyle(fontSize: 70.0),)
+                ),
+                  Expanded(
+                      flex: 1,
+                      child: Text(_text, style: TextStyle(fontSize: 30.0),)
+                  )],
+              )
                     : Center(child: CircularProgressIndicator())
               /*child: Transform.rotate(
                 angle: 90 * pi / 180,

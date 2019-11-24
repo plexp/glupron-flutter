@@ -86,6 +86,10 @@ class DetectResponse {
     this.mp3 = file;
   }
 
+  String getText() {
+    return this.text;
+  }
+
   String getValue() {
     return this.glucoseValue.toString();
   }
