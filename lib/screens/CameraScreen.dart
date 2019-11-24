@@ -95,7 +95,7 @@ class _CameraScreenState extends State<CameraScreen> {
                             ? Center(child: CircularProgressIndicator())
                             : RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
-                          onPressed: () => audioCache.play(this._sound.path),
+                          onPressed: () => advancedPlayer.play(this._sound.path, isLocal: true),
                           child: const Text('Přehrát',
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
