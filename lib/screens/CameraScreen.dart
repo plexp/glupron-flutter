@@ -53,10 +53,15 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future getImage() async {
+    String language;
+    getLanguage().then((value) {
+      language = value;
+    });
+
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     DetectSend detect = new DetectSend(image: image);
 
-    var response = await detect.sendRequest();
+    var response = await detect.sendRequest(language);
 
     DetectResponse detectResponse = new DetectResponse();
     setState(() {

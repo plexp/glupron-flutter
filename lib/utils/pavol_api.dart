@@ -24,16 +24,32 @@ class DetectSend {
     List<int> imageBytes = await image.readAsBytes();
     return imageBytes;
   }
-  sendRequest() async {
+  sendRequest(language) async {
     String base64Image = await _imageToBase64(this.image);
     List<int> imageBytes = await _imageToBytes(this.image);
+    String lan;
 
     print(base64Image);
+
+    switch(language) {
+      case 'CZ': {
+        lan = 'cs';
+        break;
+      }
+      case 'EN': {
+        lan = 'en';
+        break;
+      }
+      default: {
+        lan = 'cs';
+        break;
+      }
+    }
 
     UriData image = new UriData.fromString(base64Image, mimeType: "image/jpeg", base64: true);
     Map prepareJson = {
       'gluckometerImage': image.toString(),
-      'language': 'cs',
+      'language': lan,
     };
     String jsonR = jsonEncode(prepareJson);
 
