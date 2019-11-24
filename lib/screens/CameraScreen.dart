@@ -30,11 +30,9 @@ class _CameraScreenState extends State<CameraScreen> {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     DetectSend detect = new DetectSend(image: image);
 
-    //detect.sendRequest();
-    Map<String, dynamic> valueJson = jsonDecode(detect.sendRequest());
-    print(valueJson);
-    _value = valueJson['data']['glucoseValue'];
+    var response = await detect.sendRequest();
 
+    DetectResponse detectResponse = new DetectResponse();
     setState(() {
       _image = image;
     });
