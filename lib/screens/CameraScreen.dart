@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
+import 'package:path_provider/path_provider.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
@@ -11,6 +12,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:shh19/utils/pavol_api.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 class CameraScreen extends StatefulWidget {
   @override
@@ -18,7 +21,12 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  File _image;
+  AudioCache audioCache = new AudioCache();
+  AudioPlayer advancedPlayer = new AudioPlayer();
+  String localFilePath;
+
+  File _sound;
+  String _text;
   String _value;
 
   Future<String> getLanguage() async {
@@ -59,15 +67,26 @@ class _CameraScreenState extends State<CameraScreen> {
     });
 
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
     DetectSend detect = new DetectSend(image: image);
 
     var response = await detect.sendRequest(language);
 
-    DetectResponse detectResponse = new DetectResponse();
+
+    Map<String, dynamic> jsonP = json.decode(response);
+
+    DetectResponse detectResponse = new DetectResponse.fromJson(jsonP);
+
+    await detectResponse.processSound();
+
     setState(() {
-      _image = image;
+      _value = detectResponse.getValue();
+      _sound = detectResponse.getSound();
+      _text = detectResponse.getText();
     });
+    advancedPlayer.play(this._sound.path, isLocal: true);
   }
+
   Widget build(BuildContext context) {
     List<String> texts = switchLanguage();
 
@@ -80,7 +99,16 @@ class _CameraScreenState extends State<CameraScreen> {
             Expanded(
               flex: 10,
               child: _value != null
-                    ? Text(_value)
+                    ? Column(
+                children: <Widget>[Expanded(
+                  flex: 1,
+                  child: Text(_value, style: TextStyle(fontSize: 70.0),)
+                ),
+                  Expanded(
+                      flex: 1,
+                      child: Text(_text, style: TextStyle(fontSize: 30.0),)
+                  )],
+              )
                     : Center(child: CircularProgressIndicator())
               /*child: Transform.rotate(
                 angle: 90 * pi / 180,
@@ -97,9 +125,11 @@ class _CameraScreenState extends State<CameraScreen> {
                       flex: 5,
                       child: Container(
                         height: double.infinity,
-                        child: RaisedButton(
+                        child: this._sound == null
+                            ? Center(child: CircularProgressIndicator())
+                            : RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
-                          onPressed: getImage,
+                          onPressed: () => advancedPlayer.play(this._sound.path, isLocal: true),
                           child: Text(texts[0],
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
@@ -115,9 +145,11 @@ class _CameraScreenState extends State<CameraScreen> {
                       flex: 5,
                       child: Container(
                         height: double.infinity,
-                        child: RaisedButton(
+                        child: this._sound == null
+                            ? Center(child: CircularProgressIndicator())
+                            : RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
-                          onPressed: getImage,
+                          onPressed: () => audioCache.play(this._sound.path),
                           child: Text(texts[1],
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'dart:convert' show utf8;
 import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -31,7 +32,7 @@ class DetectSend {
 
     print(base64Image);
 
-    switch(language) {
+	switch(language) {
       case 'CZ': {
         lan = 'cs';
         break;
@@ -46,17 +47,17 @@ class DetectSend {
       }
     }
 
-    UriData image = new UriData.fromString(base64Image, mimeType: "image/jpeg", base64: true);
+    String imageS = "data:image/jpeg;base64," + base64Image;
     Map prepareJson = {
-      'gluckometerImage': image.toString(),
+      'gluckometerImage': imageS,
       'language': lan,
     };
     String jsonR = jsonEncode(prepareJson);
 
-    http.post("https://smart-health-hackathon-server.herokuapp.com/detect",
+    http.Response response = await http.post("https://smart-health-hackathon-server.herokuapp.com/detect",
         headers: {"Content-Type": "application/json"},
         body: jsonR
-    ).then((http.Response response) {
+    );
       print("Sending:");
       print(jsonR);
       print("Response status: ${response.statusCode}");
@@ -64,9 +65,7 @@ class DetectSend {
       print(response.body);
       print(response.headers);
       print(response.request);
-      this.body = response.body;
-      print(this.body);
-    });
+      return response.body;
   }
 }
 
@@ -78,15 +77,40 @@ class DetectResponse {
 
   DetectResponse({this.glucoseValue, this.text, this.mp3Base64, this.mp3});
 
-  factory DetectResponse.fromJon(Map json) {
-    Uint8List bytes = base64.decode(json['data']["mp3"]);
+  factory DetectResponse.fromJson(Map<String, dynamic> jsonR) {
+    //Uint8List bytes = base64.decode(jsonR['data']['speech']["mp3"]);
 
     return DetectResponse(
-      glucoseValue: json['glucoseValue'] as double,
-      text: json['data']['text'] as String,
-      mp3Base64: json['data']['mp3'],
-
+      glucoseValue: jsonR['data']['glucoseValue'] as double,
+      text: jsonR['data']['speech']['text'] as String,
+      mp3Base64: jsonR['data']['speech']['mp3'],
     );
   }
 
+  processSound() async {
+    String rawMP3 = this.mp3Base64;
+    String mp3Base64 = this.mp3Base64.split(",")[1];
+    print(mp3Base64);
+    Uint8List bytes = base64.decode(mp3Base64);
+    Directory tempDir = await getApplicationDocumentsDirectory();
+    String tempPath = tempDir.path;
+    File file = File(
+        "$tempPath/" + DateTime.now().millisecondsSinceEpoch.toString() + ".mp3");
+    print("File...");
+    print(file.path);
+    await file.writeAsBytes(bytes, flush: true);
+    this.mp3 = file;
+  }
+
+  String getText() {
+    return this.text;
+  }
+
+  String getValue() {
+    return this.glucoseValue.toString();
+  }
+
+  File getSound() {
+    return this.mp3;
+  }
 }
