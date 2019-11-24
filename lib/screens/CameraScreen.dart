@@ -37,7 +37,11 @@ class _CameraScreenState extends State<CameraScreen> {
 
     DetectResponse detectResponse = new DetectResponse.fromJson(jsonP);
 
-    detectResponse.processSound();
+    await detectResponse.processSound();
+
+    setState(() {
+      _value = detectResponse.getValue();
+    });
 
 
   }

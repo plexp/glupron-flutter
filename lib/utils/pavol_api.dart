@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'dart:convert' show utf8;
 import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -70,11 +71,19 @@ class DetectResponse {
     );
   }
 
-  processSound() {
+  processSound() async {
     String rawMP3 = this.mp3Base64;
     String mp3Base64 = this.mp3Base64.split(",")[1];
     print(mp3Base64);
-
+    Uint8List bytes = base64.decode(mp3Base64);Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    File file = File(
+        "$tempPath/" + DateTime.now().millisecondsSinceEpoch.toString() + ".mp3");
+    await file.writeAsBytes(bytes);
+    this.mp3 = file;
   }
 
+  getValue() {
+    return glucoseValue.toString();
+  }
 }
