@@ -14,60 +14,61 @@ class _SettingsState extends State<Settings> {
     return await SharedPreferences.getInstance();
   }
 
-  RaisedButton switchLanguage() {
-    SharedPreferences prefs;
-    getInstance().then((value) {
-      prefs = value;
+  setLanguage(language) async{
+    await getInstance().then((value) {
+      value.setString('language', language);
     });
-    String language = prefs.getString('language');
+  }
 
-    switch(language){
+  Future<String> getLanguage() async {
+    var preferences = await SharedPreferences.getInstance();
+
+    return preferences.getString('language');
+  }
+
+  List<String> switchLanguage() {
+    String language;
+    getLanguage().then((value) {
+      language = value;
+    });
+
+    switch(language) {
       case 'CZ': {
-        return RaisedButton(
-          color: Color.fromRGBO(245, 230, 228, 1),
-          padding: const EdgeInsets.all(30.0),
-          onPressed: () {
-            prefs.setString('language', 'EN');
-          },
-          child: const Text('Přepnout na angličtinu',
-            style: TextStyle(fontSize: 40, color: Colors.black),
-          ),
-        );}
-      case 'EN':{
-        return RaisedButton(
-          color: Color.fromRGBO(245, 230, 228, 1),
-          padding: const EdgeInsets.all(30.0),
-          onPressed: () {
-            prefs.setString('language', 'CZ');
-          },
-          child: const Text('Switch to czech',
-            style: TextStyle(fontSize: 40, color: Colors.black),
-          ),
-        );}
+        return ['Přihlásit se', 'EN', 'Přepnout na angličtinu'];
+      }
+      case 'EN': {
+        return ['Login', 'CZ', 'Switch to czech'];
+      }
       default: {
-        prefs.setString('language', 'CZ');
-        return RaisedButton(
-          color: Color.fromRGBO(245, 230, 228, 1),
-          padding: const EdgeInsets.all(30.0),
-          onPressed: () {
-            prefs.setString('language', 'EN');
-          },
-          child: const Text('Přepnout na angličtinu',
-            style: TextStyle(fontSize: 40, color: Colors.black),
-          ),
-        );
+        return ['Přihlásit se', 'EN', 'Přepnout na angličtinu'];
       }
     }
   }
 
   Widget build(BuildContext context) {
+    List<String> texts = switchLanguage();
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Statistika'),
-        ),
-        body: Center(
-          child: Column(
+      appBar: AppBar(
+        title: Text('Statistika'),
+      ),
+      body: Center(
+        child: Column(
             children: <Widget>[
+              Expanded(
+                flex: 8,
+                child: Container(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    color: Color.fromRGBO(245, 230, 228, 1),
+                    padding: const EdgeInsets.all(30.0),
+                    onPressed: () {
+                    },
+                    child: Text(texts[0],
+                      style: TextStyle(fontSize: 40, color: Colors.black),
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 flex: 1,
                 child: Text(""),
@@ -78,25 +79,17 @@ class _SettingsState extends State<Settings> {
                   width: double.infinity,
                   child: RaisedButton(
                     color: Color.fromRGBO(245, 230, 228, 1),
-                    padding: const EdgeInsets.all(30.0),
-                    onPressed: () {
-                    },
-                    child: const Text('Přihlásit se',
-                      style: TextStyle(fontSize: 40, color: Colors.black),
-                    ),
+                    onPressed: () => setLanguage('EN'),
+                    //onPressed: () {},
+                    child: Text(texts[2],
+                      style: TextStyle(fontSize: 40),textAlign: TextAlign.center,
                   ),
                 ),
               ),
-              Expanded(
-                flex: 8,
-                child: Container(
-                  width: double.infinity,
-                  child: switchLanguage(),
-                ),
               ),
             ]
-          ),
         ),
+      ),
     );
 
   }
