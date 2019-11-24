@@ -31,9 +31,9 @@ class DetectSend {
 
     print(base64Image);
 
-    UriData image = new UriData.fromString(base64Image, mimeType: "image/jpeg", base64: true);
+    String imageS = "data:image/jpeg;base64," + base64Image;
     Map prepareJson = {
-      'gluckometerImage': image.toString(),
+      'gluckometerImage': imageS,
       'language': 'cs',
     };
     String jsonR = jsonEncode(prepareJson);
