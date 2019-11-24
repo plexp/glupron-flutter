@@ -9,6 +9,7 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  List<String> _texts;
 
   Future<SharedPreferences> getInstance() async {
     return await SharedPreferences.getInstance();
@@ -18,6 +19,7 @@ class _SettingsState extends State<Settings> {
     await getInstance().then((value) {
       value.setString('language', language);
     });
+    switchLanguage();
   }
 
   Future<String> getLanguage() async {
@@ -26,30 +28,39 @@ class _SettingsState extends State<Settings> {
     return preferences.getString('language');
   }
 
-  List<String> switchLanguage() {
-    String language;
-    getLanguage().then((value) {
-      language = value;
-    });
-
+  void switchLanguage() async{
+    String language = await getLanguage();
+    List<String> text;
     switch(language) {
       case 'CZ': {
-        return ['Přihlásit se', 'EN', 'Přepnout na angličtinu'];
+        text = ['Nastavení', 'EN', 'Přepnout na angličtinu', 'Zpět do menu'];
+        break;
       }
       case 'EN': {
-        return ['Login', 'CZ', 'Switch to czech'];
+        text = ['Settings', 'CZ', 'Switch to czech', 'Back to menu'];
+        break;
       }
       default: {
-        return ['Přihlásit se', 'EN', 'Přepnout na angličtinu'];
+        text= ['Nastavení', 'EN', 'Přepnout na angličtinu', 'Zpět do menu'];
       }
     }
+    setState(() {
+      _texts = text;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    switchLanguage();
   }
 
   Widget build(BuildContext context) {
-    List<String> texts = switchLanguage();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statistika'),
+        title:_texts[0] == null
+            ? Center(child: CircularProgressIndicator())
+            : Text(_texts[0]),
       ),
       body: Center(
         child: Column(
@@ -62,9 +73,14 @@ class _SettingsState extends State<Settings> {
                     color: Color.fromRGBO(245, 230, 228, 1),
                     padding: const EdgeInsets.all(30.0),
                     onPressed: () {
+                      if(_texts[1] != null){
+                        setLanguage(_texts[1]);
+                      }
                     },
-                    child: Text(texts[0],
-                      style: TextStyle(fontSize: 40, color: Colors.black),
+                    child: _texts[2] == null
+                        ? Center(child: CircularProgressIndicator())
+                        : Text(_texts[2],
+                      style: TextStyle(fontSize: 40, color: Colors.black), textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -79,9 +95,12 @@ class _SettingsState extends State<Settings> {
                   width: double.infinity,
                   child: RaisedButton(
                     color: Color.fromRGBO(245, 230, 228, 1),
-                    onPressed: () => setLanguage('EN'),
-                    //onPressed: () {},
-                    child: Text(texts[2],
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/');
+                    },
+                    child: _texts[3] == null
+                        ? Center(child: CircularProgressIndicator())
+                        : Text(_texts[3],
                       style: TextStyle(fontSize: 40),textAlign: TextAlign.center,
                   ),
                 ),

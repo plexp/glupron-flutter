@@ -26,8 +26,8 @@ class _CameraScreenState extends State<CameraScreen> {
   String localFilePath;
 
   File _sound;
-  String _text;
   String _value;
+  List<String> _texts;
 
   Future<String> getLanguage() async {
     var preferences = await SharedPreferences.getInstance();
@@ -35,29 +35,33 @@ class _CameraScreenState extends State<CameraScreen> {
     return preferences.getString('language');
   }
 
-  List<String> switchLanguage(){
-    String language;
-    getLanguage().then((value) {
-      language = value;
-    });
-
+  void switchLanguage() async{
+    String language = await getLanguage();
+    List<String> text;
     switch(language) {
       case 'CZ': {
-        return ['Přehrát', 'Přehrát pomaleji', 'Vyfotit znovu'];
+        text = ['Přehrát', 'Vyfotit znovu', 'Zpět do menu'];
+        break;
       }
       case 'EN': {
-        return ['Play', 'Play slower', 'Take again'];
+        text = ['Play', 'Take again', 'Back to menu'];
+        break;
       }
       default: {
-        return ['Přehrát', 'Přehrát pomaleji', 'Vyfotit znovu'];
+        text = ['Přehrát', 'Vyfotit znovu', 'Zpět do menu'];
       }
     }
+
+    setState(() {
+      _texts = text;
+    });
   }
 
   @override
   void initState() {
     super.initState();
     getImage();
+    switchLanguage();
   }
 
   Future getImage() async {
@@ -82,13 +86,11 @@ class _CameraScreenState extends State<CameraScreen> {
     setState(() {
       _value = detectResponse.getValue();
       _sound = detectResponse.getSound();
-      _text = detectResponse.getText();
     });
     advancedPlayer.play(this._sound.path, isLocal: true);
   }
 
   Widget build(BuildContext context) {
-    List<String> texts = switchLanguage();
 
     return Scaffold(
       appBar: AppBar(
@@ -99,16 +101,7 @@ class _CameraScreenState extends State<CameraScreen> {
             Expanded(
               flex: 10,
               child: _value != null
-                    ? Column(
-                children: <Widget>[Expanded(
-                  flex: 1,
-                  child: Text(_value, style: TextStyle(fontSize: 70.0),)
-                ),
-                  Expanded(
-                      flex: 1,
-                      child: Text(_text, style: TextStyle(fontSize: 30.0),)
-                  )],
-              )
+                    ? Center(child: Text(_value, style: TextStyle(fontSize: 90.0),textAlign: TextAlign.center,),)
                     : Center(child: CircularProgressIndicator())
               /*child: Transform.rotate(
                 angle: 90 * pi / 180,
@@ -130,7 +123,9 @@ class _CameraScreenState extends State<CameraScreen> {
                             : RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
                           onPressed: () => advancedPlayer.play(this._sound.path, isLocal: true),
-                          child: Text(texts[0],
+                          child: _texts[0] == null
+                              ? Center(child: CircularProgressIndicator())
+                              : Text(_texts[0],
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
@@ -145,12 +140,12 @@ class _CameraScreenState extends State<CameraScreen> {
                       flex: 5,
                       child: Container(
                         height: double.infinity,
-                        child: this._sound == null
-                            ? Center(child: CircularProgressIndicator())
-                            : RaisedButton(
+                        child: RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
-                          onPressed: () => audioCache.play(this._sound.path),
-                          child: Text(texts[1],
+                          onPressed: getImage,
+                          child: _texts[1] == null
+                              ? Center(child: CircularProgressIndicator())
+                              : Text(_texts[1],
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
@@ -170,8 +165,12 @@ class _CameraScreenState extends State<CameraScreen> {
                   width: double.infinity,
                   child: RaisedButton(
                     color: Color.fromRGBO(245, 230, 228, 1),
-                    onPressed: getImage,
-                    child: Text(texts[2],
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/');
+                    },
+                    child: _texts[2] == null
+                    ? Center(child: CircularProgressIndicator())
+                    : Text(_texts[2],
                       style: TextStyle(fontSize: 50, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),

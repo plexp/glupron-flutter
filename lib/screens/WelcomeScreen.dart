@@ -9,6 +9,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreen extends State<WelcomeScreen> {
+  List<String> _texts;
 
   Future<String> getLanguage() async {
     var preferences = await SharedPreferences.getInstance();
@@ -16,27 +17,39 @@ class _WelcomeScreen extends State<WelcomeScreen> {
     return preferences.getString('language');
   }
 
-  List<String> switchLanguage(){
-    String language;
-    getLanguage().then((value) {
-      language = value;
-    });
-
+  void switchLanguage() async{
+    String language = await getLanguage();
+    print(language);
+    List<String> text;
+    
+    print(language);
+    
     switch(language) {
       case 'CZ': {
-        return ['Vyfotit', 'Statistiky', 'Nastavení'];
+        text = ['Vyfotit', 'Statistiky', 'Nastavení'];
+        break;
       }
       case 'EN': {
-        return ['Take photo', 'Statistic', 'Settings'];
+        text = ['Take photo', 'Statistic', 'Settings'];
+        break;
       }
       default: {
-        return ['Vyfotit', 'Statistiky', 'Nastavení'];
+        text = ['Vyfotit', 'Statistiky', 'Nastavení'];
       }
     }
+
+    setState(() {
+      _texts = text;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    switchLanguage();
   }
 
   Widget build(BuildContext context) {
-    List<String> texts = switchLanguage();
     return Scaffold(
           appBar: AppBar(
             //backgroundColor: Color.fromRGBO(232, 60, 63, 1),
@@ -55,8 +68,10 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                           onPressed: () {
                           Navigator.pushNamed(context, '/foto');
                         },
-                        child: Text(texts[0],
-                            style: TextStyle(fontSize: 70, color: Colors.black),
+                        child: _texts[0] == null
+                            ? Center(child: CircularProgressIndicator())
+                            : Text(_texts[0],
+                            style: TextStyle(fontSize: 70, color: Colors.black,), textAlign: TextAlign.center,
                         ),
                       ),
                     )
@@ -75,7 +90,9 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                         onPressed: () {
                           Navigator.pushNamed(context, '/statistic');
                         },
-                        child: Text(texts[1],
+                        child: _texts[1] == null
+                            ? Center(child: CircularProgressIndicator())
+                            : Text(_texts[1],
                             style: TextStyle(fontSize: 50, color: Colors.black)
                         ),
                       ),
@@ -95,7 +112,9 @@ class _WelcomeScreen extends State<WelcomeScreen> {
                           onPressed: () {
                             Navigator.pushNamed(context, '/settings');
                           },
-                          child: Text(texts[2],
+                          child: _texts[2] == null
+                              ? Center(child: CircularProgressIndicator())
+                              : Text(_texts[2],
                               style: TextStyle(fontSize: 50, color: Colors.black)
                           ),
                         ),

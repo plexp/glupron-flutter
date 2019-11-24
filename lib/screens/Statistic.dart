@@ -10,6 +10,7 @@ class Statistic extends StatefulWidget {
 }
 
 class _StatisticState extends State<Statistic> {
+  List<String> _texts;
 
   Future<String> getLanguage() async {
     var preferences = await SharedPreferences.getInstance();
@@ -17,28 +18,35 @@ class _StatisticState extends State<Statistic> {
     return preferences.getString('language');
   }
 
-  List<String> switchLanguage(){
-    String language;
-    getLanguage().then((value) {
-      language = value;
-    });
+  void switchLanguage() async{
+    String language = await getLanguage();
+    List<String> text;
 
     switch(language) {
       case 'CZ': {
-        return ['Statistika', 'Čas', 'Hodnota', 'Změna'];
+        text = ['Statistika', 'Čas', 'Hodnota', 'Změna', 'Zpět do menu'];
+        break;
       }
       case 'EN': {
-        return ['Statistic', 'Time', 'Value', 'Change'];
+        text = ['Statistic', 'Time', 'Value', 'Change', 'Back to menu'];
+        break;
       }
       default: {
-        return ['Statistika', 'Čas', 'Hodnota', 'Změna'];
+        text = ['Statistika', 'Čas', 'Hodnota', 'Změna', 'Zpět do menu'];
       }
     }
+    setState(() {
+      _texts = text;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    switchLanguage();
   }
 
   Widget build(BuildContext context) {
-    List<String> texts = switchLanguage();
-
     Text textStyle(text) {
       return Text(text,
         style: TextStyle(fontSize: 20.0),
@@ -123,45 +131,78 @@ class _StatisticState extends State<Statistic> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(texts[0]),
+          title: _texts[0] == null
+              ? Center(child: CircularProgressIndicator())
+              : Text(_texts[0]),
         ),
         body: Center(
           child: Column(
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Row(
+              Expanded(
+                flex: 1,
+                child:
+                Column(
                   children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Text(texts[1], style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: _texts[1] == null
+                                ? Center(child: CircularProgressIndicator())
+                                : Text(_texts[1], style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: _texts[2] == null
+                                ? Center(child: CircularProgressIndicator())
+                                : Text(_texts[2], style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: _texts[3] == null
+                                ? Center(child: CircularProgressIndicator())
+                                : Text(_texts[3],  style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+                          ),
+                        ],
+                      ),
                     ),
                     Expanded(
-                      flex: 1,
-                      child: Text(texts[2], style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Text(texts[3],  style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
-                    ),
+                        child: SizedBox(
+                          height: 200.0,
+                          child: ListView(
+                            children: <Widget>[
+                              items('18:52', '14,3', -1.0),
+                              items('17:32', '17,3', 1.0),
+                              items('16:52', '14,3', -0.5),
+                              items('16:02', '16,3', 0.0),
+                              items('15:52', '16,3', 0.5),
+
+                            ],
+                          ),
+                        )
+                    )
                   ],
                 ),
               ),
               Expanded(
-                child: SizedBox(
-                  height: 200.0,
-                  child: ListView(
-                    children: <Widget>[
-                      items('18:52', '14,3', -1.0),
-                      items('17:32', '17,3', 1.0),
-                      items('16:52', '14,3', -0.5),
-                      items('16:02', '16,3', 0.0),
-                      items('15:52', '16,3', 0.5),
-                      
-                    ],
+                flex: 1,
+                child: Container(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    color: Color.fromRGBO(245, 230, 228, 1),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/');
+                    },
+                    child: _texts[4] == null
+                        ? Center(child: CircularProgressIndicator())
+                        : Text(_texts[4],
+                      style: TextStyle(fontSize: 40),textAlign: TextAlign.center,
+                    ),
                   ),
-                )
-              )
+                ),
+              ),
             ],
           ),
         )
