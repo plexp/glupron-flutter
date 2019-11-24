@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:shh19/utils/pavol_api.dart';
 
@@ -19,6 +20,31 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   File _image;
   String _value;
+
+  Future<String> getLanguage() async {
+    var preferences = await SharedPreferences.getInstance();
+
+    return preferences.getString('language');
+  }
+
+  List<String> switchLanguage(){
+    String language;
+    getLanguage().then((value) {
+      language = value;
+    });
+
+    switch(language) {
+      case 'CZ': {
+        return ['Přehrát', 'Přehrát pomaleji', 'Vyfotit znovu'];
+      }
+      case 'EN': {
+        return ['Play', 'Play slower', 'Take again'];
+      }
+      default: {
+        return ['Přehrát', 'Přehrát pomaleji', 'Vyfotit znovu'];
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -38,6 +64,8 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
   Widget build(BuildContext context) {
+    List<String> texts = switchLanguage();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Camera'),
@@ -67,7 +95,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         child: RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
                           onPressed: getImage,
-                          child: const Text('Přehrát',
+                          child: Text(texts[0],
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
@@ -85,7 +113,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         child: RaisedButton(
                           color: Color.fromRGBO(245, 230, 228, 1),
                           onPressed: getImage,
-                          child: const Text('Přehrát pomaleji',
+                          child: Text(texts[1],
                             style: TextStyle(fontSize: 30, color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
@@ -106,7 +134,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   child: RaisedButton(
                     color: Color.fromRGBO(245, 230, 228, 1),
                     onPressed: getImage,
-                    child: const Text('Vyfotit znovu',
+                    child: Text(texts[2],
                       style: TextStyle(fontSize: 50, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),

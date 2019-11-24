@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Statistic extends StatefulWidget {
   @override
@@ -9,7 +10,34 @@ class Statistic extends StatefulWidget {
 }
 
 class _StatisticState extends State<Statistic> {
+
+  Future<String> getLanguage() async {
+    var preferences = await SharedPreferences.getInstance();
+
+    return preferences.getString('language');
+  }
+
+  List<String> switchLanguage(){
+    String language;
+    getLanguage().then((value) {
+      language = value;
+    });
+
+    switch(language) {
+      case 'CZ': {
+        return ['Statistika', 'Čas', 'Hodnota', 'Změna'];
+      }
+      case 'EN': {
+        return ['Statistic', 'Time', 'Value', 'Change'];
+      }
+      default: {
+        return ['Statistika', 'Čas', 'Hodnota', 'Změna'];
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
+    List<String> texts = switchLanguage();
 
     Text textStyle(text) {
       return Text(text,
@@ -95,7 +123,7 @@ class _StatisticState extends State<Statistic> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Statistika'),
+          title: Text(texts[0]),
         ),
         body: Center(
           child: Column(
@@ -106,15 +134,15 @@ class _StatisticState extends State<Statistic> {
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: Text('Čas', style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+                      child: Text(texts[1], style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text('Hodnota', style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+                      child: Text(texts[2], style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text('Změna',  style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
+                      child: Text(texts[3],  style: TextStyle(fontSize: 28.0), textAlign: TextAlign.center,),
                     ),
                   ],
                 ),
